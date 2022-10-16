@@ -1,14 +1,16 @@
 <?php
 
-/** @var yii\web\View $this */
-/** @var string $content */
-
 use app\assets\AppAsset;
 use app\widgets\Alert;
 use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
+use yii\web\View;
+use cetver\LanguageSelector\items\DropDownLanguageItem;
+
+/** @var View $this */
+/** @var string $content */
 
 AppAsset::register($this);
 
@@ -17,12 +19,13 @@ $this->registerMetaTag(['charset' => Yii::$app->charset], 'charset');
 $this->registerMetaTag(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1, shrink-to-fit=no']);
 $this->registerMetaTag(['name' => 'description', 'content' => $this->params['meta_description'] ?? '']);
 $this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_keywords'] ?? '']);
-$this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@web/favicon.ico']);
+$this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => 'images/favicon/favicon.ico']);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" class="h-100">
 <head>
+    <script src="https://kit.fontawesome.com/54e614519d.js" crossorigin="anonymous"></script>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
@@ -31,27 +34,43 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
 
 <header id="header">
     <?php
+    $url = Yii::$app->urlManager->baseUrl.'/images/flags/';
+    $languageItem = new DropDownLanguageItem([
+        'languages' => [
+            'cs' => '<img src="'. $url . '1.png'.'"> Čeština',
+            'sk' => '<img src="'. $url . '2.png'.'"> Slovenština',
+            'en' => '<img src="'. $url . '3.png'.'"> English',
+        ],
+        'options' => ['encode' => false],
+    ]);
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
-        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+        'options' => ['class' => 'navbar-expand-md navbar-light bg-light fixed-top italicFont']
     ]);
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav'],
+        'options' => ['class' => 'navbar-nav navbar-right ms-auto'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']],
+            ['label' => Yii::t('app', 'Shop'), 'url' => ['/site/shop']],
+            ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']],
+            ['label' => Yii::t('app', 'Contact'), 'url' => ['/site/contact']],
             Yii::$app->user->isGuest
-                ? ['label' => 'Login', 'url' => ['/site/login']]
-                : '<li class="nav-item">'
+                ? ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']]
+                : '<li class="nav-item me-auto">'
                     . Html::beginForm(['/site/logout'])
                     . Html::submitButton(
-                        'Logout (' . Yii::$app->user->identity->username . ')',
+                        Yii::t('app', 'Logout'),
                         ['class' => 'nav-link btn btn-link logout']
                     )
                     . Html::endForm()
-                    . '</li>'
+                    . '</li>',
+        ]
+    ]);
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav navbar-right ml-auto languageSelectorStyle'],
+        'items' => [
+            $languageItem->toArray()
         ]
     ]);
     NavBar::end();
@@ -71,7 +90,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => '@w
 <footer id="footer" class="mt-auto py-3 bg-light">
     <div class="container">
         <div class="row text-muted">
-            <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
+            <div class="col-md-6 text-center text-md-start">&copy; <?= Yii::t('app', 'Created by Luboš Kučera ').date('Y') ?></div>
             <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
         </div>
     </div>

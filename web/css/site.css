@@ -61,7 +61,7 @@ a.desc:after {
 /* align the logout "link" (button in form) of the navbar */
 .nav li > form > button.logout {
     padding-top: 7px;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(0, 0, 0, 0.55);
 }
 
 @media(max-width:767px) {
@@ -76,9 +76,45 @@ a.desc:after {
 .nav > li > form > button.logout:focus,
 .nav > li > form > button.logout:hover {
     text-decoration: none;
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(0, 0, 0, 0.75);
 }
 
 .nav > li > form > button.logout:focus {
     outline: none;
+}
+
+.italicFont {
+    font-family: Arial; 
+    font-style:italic;
+}
+
+.select2-container {
+    min-width: 10em!important;
+    text-align: center;
+}
+
+.languageSelectorStyle {
+    margin-left: 3%;
+}
+
+.btn-primaryLight {
+    background-color: #4c3daddb;
+    color: white;
+}
+.btn-primaryLight:hover {
+    background-color: #4c3dad;
+    color: white;
+}
+
+.divider:after, .divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+
+@media screen and (max-width: 767px) {
+    .languageSelectorStyle {
+        margin-left: unset;
+    }
 }
