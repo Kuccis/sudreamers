@@ -10,6 +10,8 @@
         'Choose language...' => 'Choose language...',
         'Logout' => 'Logout',
         'Login' => 'Login',
+        'Settings' => 'Settings',
+        'Graphics' => 'Graphic',
 
         // Register
         'Choose gender' => 'Choose gender',

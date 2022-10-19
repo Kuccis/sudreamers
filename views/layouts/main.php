@@ -19,7 +19,7 @@ $this->registerMetaTag(['charset' => Yii::$app->charset], 'charset');
 $this->registerMetaTag(['name' => 'viewport', 'content' => 'width=device-width, initial-scale=1, shrink-to-fit=no']);
 $this->registerMetaTag(['name' => 'description', 'content' => $this->params['meta_description'] ?? '']);
 $this->registerMetaTag(['name' => 'keywords', 'content' => $this->params['meta_keywords'] ?? '']);
-$this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => 'images/favicon/favicon.ico']);
+$this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii::$app->urlManager->baseUrl .'/images/favicon/favicon.ico']);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -34,15 +34,21 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => 'im
 
 <header id="header">
     <?php
-    $url = Yii::$app->urlManager->baseUrl.'/images/flags/';
+    $url = Yii::$app->urlManager->baseUrl;
     $languageItem = new DropDownLanguageItem([
         'languages' => [
-            'cs' => '<img src="'. $url . '1.png'.'"> Čeština',
-            'sk' => '<img src="'. $url . '2.png'.'"> Slovenština',
-            'en' => '<img src="'. $url . '3.png'.'"> English',
+            'cs' => '<img src="'. $url . '/images/flags/1.png'.'"> Čeština',
+            'sk' => '<img src="'. $url . '/images/flags/2.png'.'"> Slovenština',
+            'en' => '<img src="'. $url . '/images/flags/3.png'.'"> English',
         ],
         'options' => ['encode' => false],
     ]);
+    if (!Yii::$app->user->identity->profile_picture) { 
+        $img = '<img class="profileNavbar" alt="Default avatar" src="'. $url . '/images/profiles/default.jpg">'; 
+    }
+    else {
+        $img = 'nic';
+    }
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
@@ -52,19 +58,31 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => 'im
         'options' => ['class' => 'navbar-nav navbar-right ms-auto'],
         'items' => [
             ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index']],
-            ['label' => Yii::t('app', 'Shop'), 'url' => ['/site/shop']],
+            ['label' => Yii::t('app', 'Graphics'), 'url' => ['/site/graphics']],
             ['label' => Yii::t('app', 'About'), 'url' => ['/site/about']],
             ['label' => Yii::t('app', 'Contact'), 'url' => ['/site/contact']],
             Yii::$app->user->isGuest
                 ? ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']]
-                : '<li class="nav-item me-auto">'
-                    . Html::beginForm(['/site/logout'])
-                    . Html::submitButton(
-                        Yii::t('app', 'Logout'),
-                        ['class' => 'nav-link btn btn-link logout']
-                    )
-                    . Html::endForm()
-                    . '</li>',
+                : 
+                '<div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                    <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        ' . Yii::$app->user->identity->username . $img . ' 
+                        </a> 
+                        <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarDarkDropdownMenuLink">
+                        <li><a class="dropdown-item" href="settings">' . Yii::t('app', 'Settings') . '</a></li>
+                        <li>' . Html::beginForm(['/site/logout']) 
+                                .  Html::submitButton(
+                                    Yii::t('app', 'Logout'),
+                                    ['class' => 'dropdown-item logout']
+                                )
+                                . Html::endForm() .
+                                '</a></li>
+                        </ul>
+                    </li>
+                    </ul>
+                </div>',
         ]
     ]);
     echo Nav::widget([

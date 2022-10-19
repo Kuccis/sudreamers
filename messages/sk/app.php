@@ -10,6 +10,8 @@
         'Choose language...' => 'Vyberte jazyk',
         'Logout' => 'Odhlásit sa',
         'Login' => 'Prihlásit sa',
+        'Settings' => 'Nastavenie',
+        'Graphics' => 'Grafika',
 
         // Register
         'Choose gender' => 'Vyberte pohlavie',
