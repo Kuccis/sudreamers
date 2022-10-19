@@ -43,11 +43,13 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         ],
         'options' => ['encode' => false],
     ]);
-    if (!Yii::$app->user->identity->profile_picture) { 
-        $img = '<img class="profileNavbar" alt="Default avatar" src="'. $url . '/images/profiles/default.jpg">'; 
-    }
-    else {
-        $img = 'nic';
+    if(!Yii::$app->user->isGuest) {
+        if (!Yii::$app->user->identity->profile_picture) { 
+            $img = '<img class="profileNavbar" alt="Default avatar" src="'. $url . '/images/profiles/default.jpg">'; 
+        }
+        else {
+            $img = 'nic';
+        }
     }
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
